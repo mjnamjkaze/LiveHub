@@ -24,7 +24,7 @@
     "@types/simple-peer": "^9.11.8",
     "typescript": "^5",
     "eslint": "^8",
-    "eslint-config-next": "14.2.18",
+    "eslint-config-next": "16.0.5",
     "tailwindcss": "^3.4.1",
     "postcss": "^8",
     "autoprefixer": "^10.0.1",
