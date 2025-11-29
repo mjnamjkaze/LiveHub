@@ -1,0 +1,61 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String    @id @default(cuid())
+  username  String    @unique
+  createdAt DateTime  @default(now())
+  streams   Stream[]
+  messages  Message[]
+  likes     Like[]
+}
+
+model Stream {
+  id          String    @id @default(cuid())
+  userId      String
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title       String
+  isLive      Boolean   @default(true)
+  viewerCount Int       @default(0)
+  startedAt   DateTime  @default(now())
+  endedAt     DateTime?
+  messages    Message[]
+  likes       Like[]
+
+  @@index([userId])
+  @@index([isLive])
+}
+
+model Message {
+  id        String   @id @default(cuid())
+  streamId  String
+  stream    Stream   @relation(fields: [streamId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  content   String
+  createdAt DateTime @default(now())
+
+  @@index([streamId])
+  @@index([userId])
+}
+
+model Like {
+  id        String   @id @default(cuid())
+  streamId  String
+  stream    Stream   @relation(fields: [streamId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@index([streamId])
+  @@index([userId])
+}
